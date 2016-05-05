@@ -3,22 +3,38 @@
 #include <sstream>
 #include <vector>
 #include <string>
-#include "stdlib.h"
-
-//#define Trans 61
-//#define Parts  480
-//#define Styles 120
+#include <algorithm>
 
 using namespace std;
+int Trans = 0;
+int Types = 0;
+vector<int> nums;
+vector<vector<int>> groups;
+string scene;
 
-void read(vector<vector<int>> &groups, string txtfile, int Trans)
+vector<vector<string>> outputs;
+
+
+int maxIndex()
+{
+	vector<int> each(Trans);
+	for (int i = 0; i < Trans; i++)
+	{
+		each[i] = groups[i][groups[i].size() - 1];
+	}
+
+	return *max_element(each.begin(), each.end());
+}
+
+void read()
 {
 	ifstream iff;
-	iff.open(txtfile);
+	iff.open(scene);
 	if (iff.fail())
 	{
-		cout << "failed to open file!" << endl;
+		cout << "failed to open file!"<< scene << endl;
 	}
+	groups.clear();
 
 	for (int i = 0; i < Trans; i++)
 	{
@@ -31,15 +47,6 @@ void read(vector<vector<int>> &groups, string txtfile, int Trans)
 		while (iss >> a){
 			items.push_back(a);
 		}
-
-		/*string::size_type next = item.find_first_of(" ");
-		do
-		{
-		items.push_back(item.substr(0, next));
-		item = item.substr(next + 1);
-		next = item.find_first_of(" ");
-
-		} while (next != string::npos);*/
 		groups.push_back(items);
 	}
 
@@ -47,42 +54,29 @@ void read(vector<vector<int>> &groups, string txtfile, int Trans)
 	iff.close();
 }
 
-int main(int argc, char *argv[]){
-
-	string path("params.cfg");
-	int Trans = 0, int Parts = 0;
-
-	ifstream ifs;
-	ifs.open(path);
-	if (ifs.fail())
-	{
-		cout << "failed to open file " << path << endl;
-	}
-	ifs >> Trans >> Parts;
-	ifs.close();
-
-	vector<vector<int>> groups;
-	read(groups, path, Trans);
-
+void write()
+{
+	size_t Parts = maxIndex();
+	cout << Parts;
 	vector<string> output(Parts, "?");
-	vector<vector<string>> outputs;
+	outputs.clear();
 	for (int i = 0; i < Trans; i++)
 	{
 		outputs.push_back(output);
 	}
 
 	ofstream of;
-	//	string tarfile(txtfile);
-	//	tarfile = tarfile.substr(0,tarfile.find_first_of('.')) + ".arff";
-	//	of.open(tarfile);
+	string tarfile(scene);
+	tarfile = tarfile.substr(0,tarfile.find_first_of('.')) + ".arff";
+	of.open(tarfile);
 	if (of.fail())
 	{
-		cout << "failed to generate file!";
+		cout << "failed to generate file!" << tarfile << endl;
 	}
 
 	of << "@relation 'aest'" << endl;
 
-	for (int y = 0; y < Parts; y++)
+	for (int y = 1; y <= Parts; y++)
 	{
 		of << "@attribute " << '\'' << "style" << y << '\'' << " " << "{ t}" << endl;
 	}
@@ -91,7 +85,7 @@ int main(int argc, char *argv[]){
 	for (int x = 0; x < Trans; x++)
 	{
 		for (size_t y = 0; y <(groups[x].size()); y++)
-			outputs[x][groups[x][y] - 1] = 't';
+			outputs[x][groups[x][y] - 1] = "t";
 	}
 
 	for (int i = 0; i < Trans; i++)
@@ -105,5 +99,30 @@ int main(int argc, char *argv[]){
 	}
 
 	of.close();
+}
+
+int main(int argc, char *argv[]){
+
+	string path("params.cfg");
+
+	ifstream ifs;
+	ifs.open(path);
+	if (ifs.fail())
+	{
+		cout << "failed to open file " << path << endl;
+	}
+	ifs >> scene >> Trans >> Types;
+	nums.resize(Types);
+	for (int i = 0; i < Types; i++)
+	{
+		ifs >> nums[i];
+	}
+
+	ifs.close();
+
+	groups.resize(Types);
+	
+	read();
+	write();
 	return 0;
 }
