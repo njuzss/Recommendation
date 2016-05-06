@@ -5,6 +5,7 @@
 #include <set>
 #include <map>
 #include <vector>
+#include <stdlib.h>
 using namespace std;
 
 #define ARMCHAIR (1<<0)
@@ -63,7 +64,7 @@ public:
 
 	void init(int type, int target);
 
-	static void getCrossView();
+	static void getCrossView(string path);
 
 	//	fstream operator <<(fstream fs);
 
@@ -82,6 +83,7 @@ public:
 	vector<vector<vector<Association>>> cube;
 
 	vector<pair<int, double>> index_ru;
+	static vector<pair<int, int>> cross;                 //view association
 	//	map<Association,double> candidate_rule;                 //result of rule
 	//	vector<pair<int, double>> candi_mo;					//reuslt of model
 

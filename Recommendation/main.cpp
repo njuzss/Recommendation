@@ -3,21 +3,28 @@
 
 string params("params.cfg");
 
+vector<pair<int, int>> View::cross(0);
+
 int main(int argc, char *argv[])
 {
 	clock_t start = clock();
 
 	string input, database, trainning;
 	int type = 0, view = 0, target = 0;
-	bool multi = false;
+	int nmodel = 0, nview = 0;
+	bool multi = false;           //wait to process
 	ifstream ifs;
 	ifs.open(params);
 	if (ifs.fail())
 	{
 		cout << "failed to open the file: " << params << endl;
 	}
-	ifs >> type >> view >> input >> database >> trainning >> target;
+	ifs >> type >> view >> input >> target >> database >> multi >> trainning >> nmodel >> nview;
 	ifs.close();
+
+	/*get cross view*/
+	string crossView = database + "_view.item";
+	View::getCrossView(crossView);
 
 	vector<View> furniture;
 	for (int i = 1; i <= view; i++)
@@ -35,7 +42,7 @@ int main(int argc, char *argv[])
 		fur.init(type, target);
 		furniture.push_back(fur);
 		cout << "view " << i << " done!" << endl;
-		//		fur.showRule();
+//		fur.showRule();
 	}
 
 
