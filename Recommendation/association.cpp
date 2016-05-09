@@ -23,14 +23,16 @@ bool comp(pair<int, double> x, pair<int, double> y)
 
 int View::determin(int index)
 {
-	if (index <= Parts / 4)
-		return ARMCHAIR;
-	else if (index <= Parts / 2)
-		return ENDTABLE;
-	else if (index <= Parts * 3 / 4)
-		return SOFA;
-	else
-		return TEATABLE;
+	int num = 0;
+	while ((0 < index) && (index > View::maxK))
+	{
+		index = index - View::maxK;
+		num++;
+	}
+
+	int m = num / View::nview;
+	
+	return 1<<m;
 }
 
 bool View::filterRule(Association &ass)
@@ -260,7 +262,7 @@ void View::getCluster()
 	}
 
 	int index = 0, num = 0;
-	for (int x = 0; x < FURNI; x++)
+	for (int x = 0; x < this->nmodel; x++)
 	{
 		ifs >> index >> num;
 		int cluster = 0;
@@ -341,38 +343,3 @@ void View::init(int type, int target)
 	this->searchModel(type, 1);
 }
 
-void View::getCrossView(string path)
-{
-	ifstream ifs;
-	ifs.open(path);
-	if (ifs.fail())
-	{
-		cout << "failed to open " << path << endl;
-	}
-
-	while (!ifs.eof())
-	{
-		string left,right;
-		int x = 0, y = 0;
-		string::size_type p, q;
-		getline(ifs, left);
-
-		p = left.find_first_of('=');
-		cout << p << endl;
-		x = atoi(left.substr(5, p - 5).c_str());
-		cout << x << endl;;
-		right = left.substr(p + 3);
-
-		q = right.find_first_of('=');
-		cout << p << endl;
-		y = atoi(right.substr(5, q - 5).c_str());
-		cout << y << endl;;
-
-		pair<int, int> match(x,y);
-		cout << match.first << match.second << endl;
-		View::cross.push_back(match);
-
-	}
-
-	ifs.close();
-}

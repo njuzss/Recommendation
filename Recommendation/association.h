@@ -19,7 +19,7 @@ using namespace std;
 
 #define Parts  240
 
-#define K 10
+#define K 10                               //display rules
 
 struct Association
 {
@@ -43,8 +43,6 @@ class View
 public:
 	View(int m, int n, string f1, string f2, string f3);
 
-	//	static bool comp(pair<int, double> x, pair<int, double> y);
-
 	int determin(int index);
 
 	bool filterRule(Association &ass);
@@ -64,13 +62,17 @@ public:
 
 	void init(int type, int target);
 
-	static void getCrossView(string path);
+
 
 	//	fstream operator <<(fstream fs);
 
 public:
 	int type;											//model type
 	int index;                                          //view index
+
+	static int maxK;                                    //max clusters
+	static int nmodel;
+	static int nview;
 
 	string input_file;									//input 
 	vector<int> inputModel;
@@ -83,8 +85,9 @@ public:
 	vector<vector<vector<Association>>> cube;
 
 	vector<pair<int, double>> index_ru;
-	static vector<pair<int, int>> cross;                 //view association
+	
 	//	map<Association,double> candidate_rule;                 //result of rule
 	//	vector<pair<int, double>> candi_mo;					//reuslt of model
 
 };
+

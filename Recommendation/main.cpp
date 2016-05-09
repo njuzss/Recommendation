@@ -1,17 +1,21 @@
 #include "association.h"
+#include "scene.h"
 #include "time.h"
 
 string params("params.cfg");
 
-vector<pair<int, int>> View::cross(0);
+//vector<pair<int, int>> View::cross(0);
+
 
 int main(int argc, char *argv[])
 {
 	clock_t start = clock();
 
+	
+
 	string input, database, trainning;
 	int type = 0, view = 0, target = 0;
-	int nmodel = 0, nview = 0;
+	int nmodel = 0, nview = 0, maxK;
 	bool multi = false;           //wait to process
 	ifstream ifs;
 	ifs.open(params);
@@ -19,12 +23,13 @@ int main(int argc, char *argv[])
 	{
 		cout << "failed to open the file: " << params << endl;
 	}
-	ifs >> type >> view >> input >> target >> database >> multi >> trainning >> nmodel >> nview;
+	ifs >> type >> view >> input >> target >> database >> multi >> trainning >> nmodel >> nview >> maxK;
 	ifs.close();
 
+	Scene reco;
 	/*get cross view*/
 	string crossView = database + "_view.item";
-	View::getCrossView(crossView);
+	reco.getCrossView(crossView);
 
 	vector<View> furniture;
 	for (int i = 1; i <= view; i++)
