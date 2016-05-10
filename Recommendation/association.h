@@ -13,12 +13,6 @@ using namespace std;
 #define ENDTABLE (1<<2)
 #define TEATABLE (1<<3)
 
-#define FURNI 4
-
-#define Trans 64
-
-#define Parts  240
-
 #define K 10                               //display rules
 
 struct Association
@@ -43,26 +37,20 @@ class View
 public:
 	View(int m, int n, string f1, string f2, string f3);
 
-	int determin(int index);
-
-	bool filterRule(Association &ass);
-
 	void getCluster();
-	void getDatabase(int target);
-	void getInput(int type);
+	void getDatabase();
+	void getInput();
 
+	int determin(int index);
+	bool filterRule(Association &ass);
 	void count();
-
 	void constructCube();
-
 	void writeRules() const;
 
-	void searchModel(int i, int j);
+	void searchModel(int j);
 	void showRule();
 
-	void init(int type, int target);
-
-
+	void init(int target);
 
 	//	fstream operator <<(fstream fs);
 
@@ -71,23 +59,22 @@ public:
 	int index;                                          //view index
 
 	static int maxK;                                    //max clusters
-	static int nmodel;
-	static int nview;
+	static int nmodel;									//models in the scene
+	static int nview;									//views of the model
 
 	string input_file;									//input 
 	vector<int> inputModel;
 	string database_file;							    //database
 	vector<vector<int>> models;
 	vector<vector<int>> clu;                            //valid clusters
-
-	string trainning_file;		                        //trainning
+	string trainning_file;		                        //training
 	vector<Association> relations;
 	vector<vector<vector<Association>>> cube;
 
-	vector<pair<int, double>> index_ru;
+	vector<pair<int, double>> index_ru;                 //search result
 	
-	//	map<Association,double> candidate_rule;                 //result of rule
-	//	vector<pair<int, double>> candi_mo;					//reuslt of model
+//	map<Association,double> candidate_rule;             //result of rule
+//	vector<pair<int, double>> candi_mo;					//reuslt of model
 
 };
 

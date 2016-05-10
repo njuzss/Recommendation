@@ -2,14 +2,14 @@
 #include <algorithm>
 
 /* bugs
-*  style from 0-n-1 to 1-n
-*  cluster number delete
+*  style from 0-n-1 to 1-n done!
+*  cluster number delete   done!
 */
 
 View::View(int m, int n, string f1, string f2, string f3)
 	:type(m), index(n), input_file(f1), database_file(f2), trainning_file(f3)
 {
-	vector<vector<Association>> L(FURNI);
+	vector<vector<Association>> L(this->nmodel);
 	for (int i = 0; i < 16; i++)
 	{
 		cube.push_back(L);
@@ -196,19 +196,19 @@ void View::writeRules() const
 
 }
 
-void View::searchModel(int i, int j)
+void View::searchModel(int j)
 {
-
-	vector<double> result(cube[i][j].size());
+	int index = determin(this->type);
+	vector<double> result(cube[index][j].size());
 
 
 	/* left */
 	set<int> model_input;           //input model
 	for (auto it = this->inputModel.begin(); it != this->inputModel.end(); it++)
 		model_input.insert(*it);
-	for (size_t k = 0; k < cube[i][j].size(); k++)
+	for (size_t k = 0; k < cube[index][j].size(); k++)
 	{
-		set<int> lefty(cube[i][j][k].left); //LHS of candidate rule
+		set<int> lefty(cube[index][j][k].left); //LHS of candidate rule
 
 		vector<int> result_n(model_input.size());
 		vector<int> result_v(model_input.size() + lefty.size());
@@ -224,8 +224,8 @@ void View::searchModel(int i, int j)
 
 
 		/* confidence */
-		result[k] = result[k] * cube[i][j][k].conf;
-		//		cout <<"rule £º"<<k <<" left * confidence : "<<result[k] << endl;
+		result[k] = result[k] * cube[index][j][k].conf;
+//		cout <<"rule £º"<<k <<" left * confidence : "<<result[k] << endl;
 
 		pair<int, double> ru(k, result[k]);
 		this->index_ru.push_back(ru);
@@ -277,7 +277,7 @@ void View::getCluster()
 	}
 }
 
-void View::getDatabase(int target)
+void View::getDatabase()
 {
 	ifstream ifs(this->database_file);
 	if (ifs.fail())
@@ -285,19 +285,20 @@ void View::getDatabase(int target)
 		cout << "failed to open the file: " << this->database_file << endl;
 	}
 	string temp;
-	int row = 0, nums = 0;
+	int index =0, row = 0, nums = 0;
 	ifs >> nums;
 	while (nums--)
 	{
-		ifs >> row >> row;
-		int style = 0, num = 0;
+		ifs >> index >> row;
+		int style = 0;
 		vector<int > model;
 		for (int i = 0; i < row; i++)
 		{
-			ifs >> style >> num;
-			int tmp = style - (target - 1)*(Parts / FURNI);
-			if (find(clu[target - 1].begin(), clu[target - 1].end(), tmp) != clu[target - 1].end())
-				model.push_back(style - 1);
+			ifs >> style ;
+//			int tmp = style - (target - 1)*this->maxK;
+			int itype = this->type - 1;
+			if (find(clu[itype].begin(), clu[itype].end(), style) != clu[itype].end())
+				model.push_back(style);
 		}
 		this->models.push_back(model);
 	}
@@ -305,7 +306,7 @@ void View::getDatabase(int target)
 	ifs.close();
 }
 
-void View::getInput(int type)
+void View::getInput()
 {
 	ifstream ifs(this->input_file);
 	if (ifs.fail())
@@ -320,26 +321,27 @@ void View::getInput(int type)
 	row++;
 	}*/
 	ifs >> row;
-	int style = 0, num = 0;
+	int style = 0;
 	for (int i = 0; i < row; i++)
 	{
-		ifs >> style >> num;
-		if (find(clu[type - 1].begin(), clu[type - 1].end(), style) != clu[type - 1].end())
-			inputModel.push_back(style - 1);
+		ifs >> style;
+		int itype = this->type - 1;
+		if (find(clu[itype].begin(), clu[itype].end(), style) != clu[itype].end())
+			inputModel.push_back(style);
 	}
 	ifs.close();
 
 
 }
 
-void View::init(int type, int target)
+void View::init(int target)
 {
 	this->getCluster();
-	this->getInput(type);
-	this->getDatabase(target);
+	this->getInput();
+	this->getDatabase();
 	this->count();
 	this->constructCube();
 	//	this->searchModel(type,target);
-	this->searchModel(type, 1);
+	this->searchModel( 1);
 }
 
