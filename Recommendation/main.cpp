@@ -3,6 +3,9 @@
 #include "time.h"
 
 string Scene::params("params.cfg");
+int View::maxK = 0;
+int View::nmodel = 0;
+int View::nview = 0;
 
 int main(int argc, char *argv[])
 {
@@ -19,7 +22,7 @@ int main(int argc, char *argv[])
 	{
 		cout << "failed to open the file: " << Scene::params << endl;
 	}
-	ifs >> type >> view >> input >> target >> database >> multi >> trainning >> nmodel >> nview >> maxK;
+	ifs >> type >> input >> target >> database >> multi >> trainning >> View::nmodel >> View::nview >> View::maxK;
 	ifs.close();
 
 	Scene reco;
@@ -28,7 +31,7 @@ int main(int argc, char *argv[])
 	reco.getCrossView(crossView);
 
 	vector<View> furniture;
-	for (int i = 1; i <= view; i++)
+	for (int i = 1; i <= View::nview; i++)
 	{
 		string tmp;
 		stringstream ss;

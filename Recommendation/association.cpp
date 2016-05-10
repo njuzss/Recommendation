@@ -227,7 +227,7 @@ void View::searchModel(int j)
 		result[k] = result[k] * cube[index][j][k].conf;
 //		cout <<"rule £º"<<k <<" left * confidence : "<<result[k] << endl;
 
-		pair<int, double> ru(k, result[k]);
+		pair<int, double> ru((int)k, result[k]);
 		this->index_ru.push_back(ru);
 
 	}

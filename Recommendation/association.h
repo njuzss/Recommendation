@@ -1,3 +1,8 @@
+#ifndef ASSOCIATION_H_
+
+#define ASSOCIATION_H_
+
+
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -25,11 +30,11 @@ struct Association
 	int sup_l;         //support of left
 	int sup_r;         //support of right
 	double conf;       //confidence
-	double lift;       //liftness
+	double lift;       //lift
 
-	int len_l;         //length of left
-	int len_r;         //length of right
-	int len;           //length of rule
+	size_t len_l;         //length of left
+	size_t len_r;         //length of right
+	size_t len;           //length of rule
 };
 
 class View
@@ -78,3 +83,4 @@ public:
 
 };
 
+#endif // !ASSOCIATION_H_
