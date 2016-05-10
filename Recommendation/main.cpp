@@ -2,26 +2,22 @@
 #include "scene.h"
 #include "time.h"
 
-string params("params.cfg");
-
-//vector<pair<int, int>> View::cross(0);
-
+string Scene::params("params.cfg");
 
 int main(int argc, char *argv[])
 {
 	clock_t start = clock();
 
-	
-
 	string input, database, trainning;
 	int type = 0, view = 0, target = 0;
-	int nmodel = 0, nview = 0, maxK;
-	bool multi = false;           //wait to process
+	int nmodel = 0, nview = 0, maxK =0;
+	bool multi = false;							//wait to later process
+	
 	ifstream ifs;
-	ifs.open(params);
+	ifs.open(Scene::params);
 	if (ifs.fail())
 	{
-		cout << "failed to open the file: " << params << endl;
+		cout << "failed to open the file: " << Scene::params << endl;
 	}
 	ifs >> type >> view >> input >> target >> database >> multi >> trainning >> nmodel >> nview >> maxK;
 	ifs.close();
@@ -40,11 +36,11 @@ int main(int argc, char *argv[])
 		ss >> tmp;
 
 		string _input = input + "_" + tmp + ".view";
-		string _database = database + "_" + tmp + ".txt";
+		string _database = database + "_" + tmp + ".data";
 		string _trainning = trainning + "_" + tmp + ".item";
 
 		View fur(type, i, _input, _database, _trainning);
-		fur.init(type, target);
+		fur.init(target);
 		furniture.push_back(fur);
 		cout << "view " << i << " done!" << endl;
 //		fur.showRule();
