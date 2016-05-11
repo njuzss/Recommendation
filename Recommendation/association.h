@@ -55,7 +55,7 @@ public:
 	void searchModel(int j);
 	void showRule();
 
-	void init(int target);
+	void init();
 
 	//	fstream operator <<(fstream fs);
 
@@ -66,6 +66,7 @@ public:
 	static int maxK;                                    //max clusters
 	static int nmodel;									//models in the scene
 	static int nview;									//views of the model
+	static int target;
 
 	string input_file;									//input 
 	vector<int> inputModel;

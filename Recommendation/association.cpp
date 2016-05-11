@@ -1,11 +1,6 @@
 #include "association.h"
 #include <algorithm>
 
-/* bugs
-*  style from 0-n-1 to 1-n done!
-*  cluster number delete   done!
-*/
-
 View::View(int m, int n, string f1, string f2, string f3)
 	:type(m), index(n), input_file(f1), database_file(f2), trainning_file(f3)
 {
@@ -296,7 +291,7 @@ void View::getDatabase()
 		{
 			ifs >> style ;
 //			int tmp = style - (target - 1)*this->maxK;
-			int itype = this->type - 1;
+			int itype = this->target - 1;
 			if (find(clu[itype].begin(), clu[itype].end(), style) != clu[itype].end())
 				model.push_back(style);
 		}
@@ -334,14 +329,13 @@ void View::getInput()
 
 }
 
-void View::init(int target)
+void View::init()
 {
 	this->getCluster();
 	this->getInput();
 	this->getDatabase();
 	this->count();
 	this->constructCube();
-	//	this->searchModel(type,target);
-	this->searchModel( 1);
+	this->searchModel(1);
 }
 

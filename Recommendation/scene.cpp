@@ -35,19 +35,18 @@ void Scene::getCrossView(string path)
 		getline(ifs, left);
 
 		p = left.find_first_of('=');
-		cout << p << endl;
 		x = atoi(left.substr(5, p - 5).c_str());
-		cout << x << endl;;
+
 		right = left.substr(p + 3);
 
 		q = right.find_first_of('=');
-		cout << p << endl;
 		y = atoi(right.substr(5, q - 5).c_str());
-		cout << y << endl;;
 
 		pair<int, int> match(x, y);
-		cout << match.first << match.second << endl;
-		if (filterMatch(match))
+//		cout << match.first << match.second << endl;
+
+
+		if (this->filterMatch(match))
 		{
 			this->cross.push_back(match);
 		}

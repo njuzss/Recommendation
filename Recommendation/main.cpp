@@ -6,14 +6,15 @@ string Scene::params("params.cfg");
 int View::maxK = 0;
 int View::nmodel = 0;
 int View::nview = 0;
+int View::target = 0;
 
 int main(int argc, char *argv[])
 {
 	clock_t start = clock();
 
 	string input, database, trainning;
-	int type = 0, view = 0, target = 0;
-	int nmodel = 0, nview = 0, maxK =0;
+	int type = 0,  target = 0;
+
 	bool multi = false;							//wait to later process
 	
 	ifstream ifs;
@@ -22,7 +23,7 @@ int main(int argc, char *argv[])
 	{
 		cout << "failed to open the file: " << Scene::params << endl;
 	}
-	ifs >> type >> input >> target >> database >> multi >> trainning >> View::nmodel >> View::nview >> View::maxK;
+	ifs >> type >> input >> View::target >> database >> multi >> trainning >> View::nmodel >> View::nview >> View::maxK;
 	ifs.close();
 
 	Scene reco;
@@ -43,7 +44,7 @@ int main(int argc, char *argv[])
 		string _trainning = trainning + "_" + tmp + ".item";
 
 		View fur(type, i, _input, _database, _trainning);
-		fur.init(target);
+		fur.init();
 		furniture.push_back(fur);
 		cout << "view " << i << " done!" << endl;
 //		fur.showRule();
