@@ -51,8 +51,6 @@ int main(int argc, char *argv[])
 //		fur.showRule();
 	}
 
-	reco.countPair();
-	reco.combinRule();
 	reco.init();
 
 	/*furniture retrieve*/

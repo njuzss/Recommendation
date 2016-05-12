@@ -70,8 +70,35 @@ void Scene::getCrossView(string path)
 	ifs.close();
 }
 
+void Scene::getInStyle()
+{
+	for (auto it = this->furniture.begin(); it != this->furniture.end(); it++)	
+	{
+		//this->istyle.insert(it->inputModel.begin(),it->inputModel.end());
+		//fuck!!!
+	}
+}
+
+void Scene::getPair()
+{
+	for (int i = 0; i < this->cross.size(); i++)
+	{
+		if (istyle.find(this->cross[i].first) != istyle.end() && istyle.find(this->cross[i].second) != istyle.end())
+		{
+			this->icross.push_back(i);
+		}
+	}
+	/*for (auto it = this->icross.begin(); it != this->icross.end(); it++)
+	{
+		cout << *it << endl;
+	}*/
+	cout << this->icross.size() << endl;
+}
+
 int Scene::findPair(int style)
 {
+
+
 	int count = 0;
 	for (auto it = this->cross.begin(); it != this->cross.end(); it++)
 	{
@@ -124,12 +151,6 @@ void Scene::searchModel()
 
 void Scene::init()
 {
-	/*for (int i = 0; i < this->furniture.size(); i++)
-	{
-	for (auto it = this->furniture[i].inputModel.begin(); it != this->furniture[i].inputModel.end(); it++)
-	{
-	cout << *it << " ";
-	}
-	cout << endl;
-	}*/
+	this->getInStyle();
+	this->getPair();
 }
