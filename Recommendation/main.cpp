@@ -7,14 +7,15 @@ int View::maxK = 0;
 int View::nmodel = 0;
 int View::nview = 0;
 int View::target = 0;
+int View::type = 0;
+string View::name("");
 
 int main(int argc, char *argv[])
 {
 	clock_t start = clock();
 
 	string input, database, trainning;
-	int type = 0,  target = 0;
-
+	
 	bool multi = false;							//wait to later process
 	
 	ifstream ifs;
@@ -23,15 +24,15 @@ int main(int argc, char *argv[])
 	{
 		cout << "failed to open the file: " << Scene::params << endl;
 	}
-	ifs >> type >> input >> View::target >> database >> multi >> trainning >> View::nmodel >> View::nview >> View::maxK;
+	ifs >> View::type >> View::name>> input >> View::target >> database >> multi >> trainning >> View::nmodel >> View::nview >> View::maxK;
 	ifs.close();
 
-	Scene reco;
+	Scene reco(View::nview);
 	/*get cross view*/
-	string crossView = database + "_view.item";
+	string crossView = View::name + "_view.item";
 	reco.getCrossView(crossView);
 
-	vector<View> furniture;
+//	vector<View> furniture;
 	for (int i = 1; i <= View::nview; i++)
 	{
 		string tmp;
@@ -43,13 +44,16 @@ int main(int argc, char *argv[])
 		string _database = database + "_" + tmp + ".data";
 		string _trainning = trainning + "_" + tmp + ".item";
 
-		View fur(type, i, _input, _database, _trainning);
+		View fur( i, _input, _database, _trainning);
 		fur.init();
-		furniture.push_back(fur);
+		reco.furniture.push_back(fur);
 		cout << "view " << i << " done!" << endl;
 //		fur.showRule();
 	}
 
+	reco.countPair();
+	reco.combinRule();
+	reco.init();
 
 	/*furniture retrieve*/
 

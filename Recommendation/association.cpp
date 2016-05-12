@@ -1,8 +1,8 @@
 #include "association.h"
 #include <algorithm>
 
-View::View(int m, int n, string f1, string f2, string f3)
-	:type(m), index(n), input_file(f1), database_file(f2), trainning_file(f3)
+View::View(int v, string f1, string f2, string f3)
+	:index(v), input_file(f1), database_file(f2), trainning_file(f3)
 {
 	vector<vector<Association>> L(this->nmodel);
 	for (int i = 0; i < 16; i++)
@@ -68,8 +68,6 @@ void View::count()
 
 	string line, lefty, righty, con, lif;
 	string::size_type p, q, r;
-
-
 
 	while (!iff.eof())
 	{
@@ -188,6 +186,56 @@ void View::writeRules() const
 		ru << endl;
 	}
 	ru.close();
+
+}
+
+void View::searchRule()
+{
+	int j = 1;                          //add a method later,return the len 
+	int index = determin(this->type);
+	vector<double> result(cube[index][j].size());
+
+
+	/* left */
+	set<int> model_input;           //input model
+	for (auto it = this->inputModel.begin(); it != this->inputModel.end(); it++)
+		model_input.insert(*it);
+	for (size_t k = 0; k < cube[index][j].size(); k++)
+	{
+		set<int> lefty(cube[index][j][k].left); //LHS of candidate rule
+
+		vector<int> result_n(model_input.size());
+		vector<int> result_v(model_input.size() + lefty.size());
+
+		auto it_n = set_intersection(lefty.begin(), lefty.end(), model_input.begin(), model_input.end(), result_n.begin());
+		result_n.resize(it_n - result_n.begin());
+		if (result_n.empty())
+			continue;
+		auto it_v = set_union(lefty.begin(), lefty.end(), model_input.begin(), model_input.end(), result_v.begin());
+		result_v.resize(it_v - result_v.begin());
+
+		result[k] = result_n.size()*1.0 / result_v.size();
+
+
+		/* confidence */
+		result[k] = result[k] * cube[index][j][k].conf;
+		//		cout <<"rule £º"<<k <<" left * confidence : "<<result[k] << endl;
+
+		pair<int, double> ru((int)k, result[k]);
+		this->index_ru.push_back(ru);
+
+	}
+	/* top K */
+	sort(this->index_ru.begin(), this->index_ru.end(), comp);
+	if (this->index_ru.size() > K)
+	{
+		this->index_ru.resize(K);
+	}
+
+	for (int p = 0; p< this->index_ru.size(); p++)
+	{
+		this->candi_rule.push_back(this->cube[index][j][this->index_ru[p].first]);
+	}
 
 }
 
@@ -336,6 +384,6 @@ void View::init()
 	this->getDatabase();
 	this->count();
 	this->constructCube();
-	this->searchModel(1);
+	this->searchRule();
 }
 

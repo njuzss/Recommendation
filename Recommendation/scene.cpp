@@ -1,5 +1,20 @@
 #include "scene.h"
 
+Scene::Scene(int nview)
+{
+	vector<pair<int, int>> rules(nview);
+	for (int i = 0; i < K; i++)
+	{
+		this->candi_rules.push_back(rules);
+	}
+
+	/*vector<int> x(K);
+	for (int i = 0; i < nview; i++)
+	{
+	this->count.push_back(x);
+	}*/
+}
+
 int Scene::determin(int index)
 {
 	int num = 0;
@@ -53,4 +68,68 @@ void Scene::getCrossView(string path)
 	}
 
 	ifs.close();
+}
+
+int Scene::findPair(int style)
+{
+	int count = 0;
+	for (auto it = this->cross.begin(); it != this->cross.end(); it++)
+	{
+	    if (it->first == style )
+		{
+			count++;
+		}
+		else if (it->second == style)
+		{
+		}
+	}
+
+	return count;
+}
+
+void Scene::countPair()
+{
+	for (int i = 0; i < this->furniture.size(); i++)
+	{
+		vector<int> result;
+		for (auto it = this->furniture[i].candi_rule.begin(); it != this->furniture[i].candi_rule.end(); it++)
+		{
+			int pairs = 0;
+			set<int> left(it->left);	
+			for (auto itt = left.begin(); itt != left.end(); itt++)
+			{
+				pairs += findPair(*itt);
+			}
+			result.push_back(pairs);
+		}
+		this->count.push_back(result);
+	}
+}
+
+void Scene::combinRule()
+{
+	for (auto it = this->count.begin(); it != this->count.end(); it++)
+	{
+		for (auto itt = it->begin(); itt != it->end(); itt++)
+		{
+			cout << *itt << " ";
+		}
+		cout << endl;
+	}
+}
+
+void Scene::searchModel()
+{
+}
+
+void Scene::init()
+{
+	/*for (int i = 0; i < this->furniture.size(); i++)
+	{
+	for (auto it = this->furniture[i].inputModel.begin(); it != this->furniture[i].inputModel.end(); it++)
+	{
+	cout << *it << " ";
+	}
+	cout << endl;
+	}*/
 }

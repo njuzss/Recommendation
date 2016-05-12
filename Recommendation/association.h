@@ -22,15 +22,15 @@ using namespace std;
 
 struct Association
 {
-	set<int> left;     //index of LHS
-	set<int> right;    //index of RHS
-	set<int> model_l;  //models of LHS
-	set<int> model_r;  //models of RHS
+	set<int> left;        //index of LHS
+	set<int> right;       //index of RHS
+	set<int> model_l;     //models of LHS
+	set<int> model_r;     //models of RHS
 
-	int sup_l;         //support of left
-	int sup_r;         //support of right
-	double conf;       //confidence
-	double lift;       //lift
+	int sup_l;            //support of left
+	int sup_r;            //support of right
+	double conf;          //confidence
+	double lift;          //lift
 
 	size_t len_l;         //length of left
 	size_t len_r;         //length of right
@@ -40,7 +40,7 @@ struct Association
 class View
 {
 public:
-	View(int m, int n, string f1, string f2, string f3);
+	View(int v, string f1, string f2, string f3);
 
 	void getCluster();
 	void getDatabase();
@@ -52,17 +52,19 @@ public:
 	void constructCube();
 	void writeRules() const;
 
+	void searchRule();
 	void searchModel(int j);
 	void showRule();
 
 	void init();
 
-	//	fstream operator <<(fstream fs);
+//	fstream operator <<(fstream fs);
 
 public:
-	int type;											//model type
+	
 	int index;                                          //view index
-
+	static int type;											//model type
+	static string name;
 	static int maxK;                                    //max clusters
 	static int nmodel;									//models in the scene
 	static int nview;									//views of the model
@@ -79,8 +81,8 @@ public:
 
 	vector<pair<int, double>> index_ru;                 //search result
 	
-//	map<Association,double> candidate_rule;             //result of rule
-//	vector<pair<int, double>> candi_mo;					//reuslt of model
+	vector<Association> candi_rule;                 //result of rule
+
 
 };
 
