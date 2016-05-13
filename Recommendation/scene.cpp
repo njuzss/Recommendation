@@ -74,8 +74,11 @@ void Scene::getInStyle()
 {
 	for (auto it = this->furniture.begin(); it != this->furniture.end(); it++)	
 	{
+		for (auto itt = it->candi_rule.begin(); itt != it->candi_rule.end(); itt++)
+		{
+			this->istyle.insert(itt->left.begin(),itt->left.end());
+		}
 		//this->istyle.insert(it->inputModel.begin(),it->inputModel.end());
-		//fuck!!!
 	}
 }
 
@@ -83,34 +86,26 @@ void Scene::getPair()
 {
 	for (int i = 0; i < this->cross.size(); i++)
 	{
-		if (istyle.find(this->cross[i].first) != istyle.end() && istyle.find(this->cross[i].second) != istyle.end())
+		if (istyle.count(this->cross[i].first)  && istyle.count(this->cross[i].second))
 		{
 			this->icross.push_back(i);
+			this->vcross.insert(this->cross[i].first);
+			this->vcross.insert(this->cross[i].second);
 		}
 	}
-	/*for (auto it = this->icross.begin(); it != this->icross.end(); it++)
-	{
-		cout << *it << endl;
-	}*/
-	cout << this->icross.size() << endl;
+//	cout << this->icross.size() << endl;
 }
 
 int Scene::findPair(int style)
 {
-
-
 	int count = 0;
-	for (auto it = this->cross.begin(); it != this->cross.end(); it++)
+	for (auto it = this->icross.begin(); it != this->icross.end(); it++)
 	{
-	    if (it->first == style )
+		if (this->cross[*it].first == style || this->cross[*it].second == style)
 		{
 			count++;
 		}
-		else if (it->second == style)
-		{
-		}
 	}
-
 	return count;
 }
 
@@ -153,4 +148,6 @@ void Scene::init()
 {
 	this->getInStyle();
 	this->getPair();
+	this->countPair();
+	this->combinRule();
 }

@@ -22,7 +22,9 @@ public:
 	set<int> istyle;							  //input models styles
 	vector<pair<int, int>> cross;                 //view association
 	vector<int> icross;                           //index of related cross 
-	
+	set<int> vcross;
+
+
 	vector<vector<int>> count;
 	vector<pair<int, int>> match;
 	vector<vector<pair<int, int>>> candi_rules;
