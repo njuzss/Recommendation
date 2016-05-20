@@ -1,8 +1,8 @@
 #include "association.h"
 #include <algorithm>
 
-View::View(int v, string f1, string f2, string f3)
-	:index(v), input_file(f1), database_file(f2), trainning_file(f3)
+View::View(int v, string f1,  string f3)
+	:index(v), input_file(f1),  trainning_file(f3)
 {
 	vector<vector<Association>> L(this->nmodel);
 	for (int i = 0; i < 16; i++)
@@ -320,6 +320,7 @@ void View::getCluster()
 	}
 }
 
+/*
 void View::getDatabase()
 {
 	ifstream ifs(this->database_file);
@@ -348,6 +349,7 @@ void View::getDatabase()
 
 	ifs.close();
 }
+*/
 
 void View::getInput()
 {
@@ -381,7 +383,7 @@ void View::init()
 {
 	this->getCluster();
 	this->getInput();
-	this->getDatabase();
+//	this->getDatabase();
 	this->count();
 	this->constructCube();
 	this->searchRule();

@@ -40,7 +40,7 @@ struct Association
 class View
 {
 public:
-	View(int v, string f1, string f2, string f3);
+	View(int v, string f1,  string f3);
 
 	void getCluster();
 	void getDatabase();
@@ -72,8 +72,8 @@ public:
 
 	string input_file;									//input 
 	vector<int> inputModel;
-	string database_file;							    //database
-	vector<vector<int>> models;
+	//string database_file;							    //database
+	//vector<vector<int>> models;
 	vector<vector<int>> clu;                            //valid clusters
 	string trainning_file;		                        //training
 	vector<Association> relations;

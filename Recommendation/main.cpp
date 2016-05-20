@@ -24,14 +24,26 @@ int main(int argc, char *argv[])
 	{
 		cout << "failed to open the file: " << Scene::params << endl;
 	}
-	ifs >> View::type >> View::name>> input >> View::target >> database >> multi >> trainning >> View::nmodel >> View::nview >> View::maxK;
+	string tmp;
+	ifs >> tmp >> View::type 
+		>> tmp >> View::name
+		>> tmp >> input
+		>> tmp >> View::target
+		>> tmp >> database
+		>> tmp >> multi
+		>> tmp >> trainning
+		>> tmp >> View::nmodel
+		>> tmp >> View::nview
+		>> tmp >> View::maxK;
 	ifs.close();
 
-	Scene reco(View::nview);
+	string _database = database + ".data";
+	Scene reco(View::nview, _database);
 	/*get cross view*/
 	string crossView = View::name + "_view.item";
 	reco.getCrossView(crossView);
 
+//	reco.init();
 //	vector<View> furniture;
 	for (int i = 1; i <= View::nview; i++)
 	{
@@ -44,7 +56,7 @@ int main(int argc, char *argv[])
 		string _database = database + "_" + tmp + ".data";
 		string _trainning = trainning + "_" + tmp + ".item";
 
-		View fur( i, _input, _database, _trainning);
+		View fur( i, _input, _trainning);
 		fur.init();
 		reco.furniture.push_back(fur);
 		cout << "view " << i << " done!" << endl;
