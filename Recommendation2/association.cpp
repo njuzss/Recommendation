@@ -1,27 +1,28 @@
 #include "association.h"
 #include <algorithm>
 
-Scene::Scene(string f1,  string f3)
-	: input_file(f1),  trainning_file(f3)
-{
-	vector<vector<Association>> L(this->nmodel);
-	for (int i = 0; i < 16; i++)
-	{
-		cube.push_back(L);
-	}
-}
+//Room::Room(string f1,  string f3)
+//	: input_file(f1),  trainning_file(f3)
+//{
+//	vector<vector<Association>> L(this->nmodel);
+//	for (int i = 0; i < 16; i++)
+//	{
+//		cube.push_back(L);
+//	}
+//}
+Room::Room(string file) :params(file){}
 
 bool comp(pair<int, double> x, pair<int, double> y)
 {
 	return x.second > y.second;
 }
 
-int Scene::determin(int index)
+int Room::determin(int index)
 {
 	int num = 0;
-	while ((0 < index) && (index > Scene::maxK))
+	while ((0 < index) && (index > Room::maxK))
 	{
-		index = index - Scene::maxK;
+		index = index - Room::maxK;
 		num++;
 	}
 
@@ -30,7 +31,7 @@ int Scene::determin(int index)
 	return 1<<m;
 }
 
-bool Scene::filterRule(Association &ass)
+bool Room::filterRule(Association &ass)
 {
 
 	for (auto itt = ass.left.begin(); itt != ass.left.end(); itt++)
@@ -57,7 +58,7 @@ bool Scene::filterRule(Association &ass)
 		return true;
 }
 
-void Scene::count()
+void Room::count()
 {
 	ifstream iff;
 	iff.open(this->trainning_file);
@@ -137,7 +138,7 @@ void Scene::count()
 	iff.close();
 }
 
-void Scene::constructCube()
+void Room::constructCube()
 {
 	for (auto it = this->relations.begin(); it != this->relations.end(); it++)
 	{
@@ -151,7 +152,7 @@ void Scene::constructCube()
 	}
 }
 
-void Scene::writeRules() const
+void Room::writeRules() const
 {
 	fstream ru;
 	string name;
@@ -189,7 +190,7 @@ void Scene::writeRules() const
 
 }
 
-void Scene::searchRule()
+void Room::searchRule()
 {
 	int j = 1;                          //add a method later,return the len 
 	int index = determin(this->type);
@@ -239,7 +240,7 @@ void Scene::searchRule()
 
 }
 
-void Scene::searchModel(int j)
+void Room::searchModel(int j)
 {
 	int index = determin(this->type);
 	vector<double> result(cube[index][j].size());
@@ -284,7 +285,7 @@ void Scene::searchModel(int j)
 
 }
 
-void Scene::showRule()
+void Room::showRule()
 {
 
 	for (auto it = index_ru.begin(); it != index_ru.end(); it++)
@@ -294,7 +295,7 @@ void Scene::showRule()
 	}
 }
 
-void Scene::getCluster()
+void Room::getCluster()
 {
 	string cluPath(this->trainning_file);
 	cluPath = cluPath.substr(0, cluPath.size() - 4) + "clu";
@@ -321,7 +322,7 @@ void Scene::getCluster()
 }
 
 /*
-void Scene::getDatabase()
+void Room::getDatabase()
 {
 	ifstream ifs(this->database_file);
 	if (ifs.fail())
@@ -351,7 +352,7 @@ void Scene::getDatabase()
 }
 */
 
-void Scene::getInput()
+void Room::getInput()
 {
 	ifstream ifs(this->input_file);
 	if (ifs.fail())
@@ -379,8 +380,26 @@ void Scene::getInput()
 
 }
 
-void Scene::init()
+void Room::init()
 {
+	ifstream ifs;
+	ifs.open(this->params);
+	if (ifs.fail())
+	{
+		cout << "failed to open the file: " << this->params << endl;
+	}
+	string tmp;
+	ifs >> tmp >> this->type
+		>> tmp >> this->name
+		>> tmp >> this->input_file
+		>> tmp >> this->target
+		>> tmp >> this->database_file
+		>> tmp >> this->multi
+		>> tmp >> this->trainning_file
+		>> tmp >> this->nmodel
+		>> tmp >> this->maxK;
+	ifs.close();
+	
 	this->getCluster();
 	this->getInput();
 //	this->getDatabase();

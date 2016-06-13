@@ -37,10 +37,10 @@ struct Association
 	size_t len;           //length of rule
 };
 
-class Scene
+class Room
 {
 public:
-	Scene( string f1,  string f3);
+	Room(string file);
 
 	void getCluster();
 	void getDatabase();
@@ -61,12 +61,13 @@ public:
 
 public:
 	
-	static string params;					            //parameters file	
-	static int type;									//model type
-	static string name;
-	static int maxK;                                    //max clusters
-	static int nmodel;									//models in the scene
-	static int target;
+	string params;					            //parameters file	
+	int type;									        //model type
+	string name;										//model name
+	int maxK;                                           //max clusters
+	int nmodel;									        //models in the Room
+	int target;
+	bool multi;
 
 	string input_file;									//input 
 	vector<int> inputModel;
