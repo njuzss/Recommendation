@@ -321,7 +321,7 @@ void Room::getCluster()
 	}
 }
 
-/*
+
 void Room::getDatabase()
 {
 	ifstream ifs(this->database_file);
@@ -350,7 +350,7 @@ void Room::getDatabase()
 
 	ifs.close();
 }
-*/
+
 
 void Room::getInput()
 {
@@ -359,6 +359,17 @@ void Room::getInput()
 	{
 		cout << "failed to open the file: " << this->input_file << endl;
 	}
+
+	string tmp;
+	int num = 0;
+	while (getline(ifs, tmp))
+	{
+		num++;
+	}
+
+	ifs.clear();                  // do not forget to clear state flag
+	ifs.seekg(ios_base::beg);
+
 	string temp;
 	int row = 0;
 	/*while (!ifs.eof())
@@ -371,9 +382,9 @@ void Room::getInput()
 	for (int i = 0; i < row; i++)
 	{
 		ifs >> style;
-		int itype = this->type - 1;
-		if (find(clu[itype].begin(), clu[itype].end(), style) != clu[itype].end())
-			inputModel.push_back(style);
+		/*int itype = this->type - 1;
+		if (find(clu[itype].begin(), clu[itype].end(), style) != clu[itype].end())*/
+		inputModel.push_back(style);
 	}
 	ifs.close();
 
@@ -400,9 +411,9 @@ void Room::init()
 		>> tmp >> this->maxK;
 	ifs.close();
 	
-	this->getCluster();
+//	this->getCluster();
 	this->getInput();
-//	this->getDatabase();
+	this->getDatabase();
 	this->count();
 	this->constructCube();
 	this->searchRule();
